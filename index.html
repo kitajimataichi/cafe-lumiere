@@ -73,16 +73,18 @@
     text-align:center;
     padding:120px 6vw 60px;
     position:relative;
-    background:
-      radial-gradient(ellipse at 20% 20%, rgba(191,106,77,0.10), transparent 55%),
-      radial-gradient(ellipse at 80% 75%, rgba(138,106,82,0.14), transparent 55%),
-      var(--cream);
     overflow:hidden;
+    isolation:isolate;
+  }
+  .hero-bg{
+    position:absolute;inset:0;z-index:-2;
+    background:url('https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1800&q=75') center/cover no-repeat;
   }
   .hero::before{
     content:"";
-    position:absolute;inset:0;
-    background-image: repeating-linear-gradient(115deg, rgba(60,42,32,0.025) 0px, rgba(60,42,32,0.025) 1px, transparent 1px, transparent 90px);
+    position:absolute;inset:0;z-index:-1;
+    background:
+      linear-gradient(180deg, rgba(250,245,236,0.94) 0%, rgba(250,245,236,0.88) 55%, rgba(250,245,236,0.97) 100%);
     pointer-events:none;
   }
   .steam{
@@ -165,21 +167,22 @@
   .about-visual{
     aspect-ratio:4/5;
     border-radius:6px;
-    background:
-      linear-gradient(165deg, var(--cream-2), var(--brown-soft) 140%);
     position:relative;
     overflow:hidden;
     box-shadow:0 30px 60px -30px rgba(60,42,32,0.4);
   }
-  .about-visual::before{
-    content:"☕";
-    position:absolute;inset:0;
-    display:flex;align-items:center;justify-content:center;
-    font-size:5rem;
-    filter:grayscale(1) brightness(1.6) opacity(0.35);
+  .about-visual img{
+    width:100%;height:100%;object-fit:cover;
   }
   .about-visual .frame{
     position:absolute;inset:18px;border:1px solid rgba(255,253,249,0.5);
+    pointer-events:none;
+  }
+  .about-visual .badge{
+    position:absolute;bottom:30px;left:30px;right:30px;
+    background:rgba(60,42,32,0.55);backdrop-filter:blur(4px);
+    color:var(--cream);padding:14px 18px;border-radius:4px;
+    font-size:0.8rem;letter-spacing:0.04em;
   }
   .about-text p{color:var(--brown);font-size:1rem;margin-bottom:20px;}
   .about-text .signature{
@@ -199,6 +202,11 @@
   .menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0 60px;}
   .menu-panel{display:none;grid-column:1/-1;grid-template-columns:subgrid;}
   .menu-panel.active{display:grid;}
+  .menu-panel .menu-banner{
+    grid-column:1/-1;
+    height:220px;border-radius:6px;overflow:hidden;margin-bottom:36px;
+  }
+  .menu-panel .menu-banner img{width:100%;height:100%;object-fit:cover;}
   .menu-item{
     display:flex;justify-content:space-between;gap:14px;
     padding:20px 0;border-bottom:1px dashed var(--line);
@@ -217,14 +225,22 @@
   .gallery-grid{
     display:grid;grid-template-columns:repeat(4,1fr);gap:14px;
   }
-  .gallery-grid div{
-    aspect-ratio:1;border-radius:4px;
-    background:linear-gradient(150deg,var(--cream-2),var(--brown-soft));
-    display:flex;align-items:center;justify-content:center;
-    font-size:1.6rem;opacity:0.55;filter:grayscale(0.3);
+  .gallery-grid figure{
+    margin:0;aspect-ratio:1;border-radius:4px;overflow:hidden;position:relative;
   }
-  .gallery-grid div:nth-child(3n+1){background:linear-gradient(150deg,var(--terracotta),var(--cream-2));}
-  .gallery-grid div:nth-child(3n+2){background:linear-gradient(150deg,var(--brown),var(--cream-2));}
+  .gallery-grid img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .5s ease;
+  }
+  .gallery-grid figure:hover img{transform:scale(1.08);}
+  .gallery-grid figcaption{
+    position:absolute;left:0;right:0;bottom:0;
+    padding:20px 12px 10px;
+    background:linear-gradient(0deg, rgba(30,20,14,0.75), transparent);
+    color:var(--white);font-size:0.72rem;letter-spacing:0.05em;
+    opacity:0;transition:opacity .3s ease;
+  }
+  .gallery-grid figure:hover figcaption{opacity:1;}
 
   /* Info / Access */
   .info-section{background:var(--brown-deep);color:var(--cream);border-radius:8px;}
@@ -291,6 +307,7 @@
 </header>
 
 <section class="hero" id="top">
+  <div class="hero-bg"></div>
   <div class="eyebrow">TOKYO · KURAMAE</div>
   <h1 class="serif">Café Lumière</h1>
   <h2>光が差し込む、ひとやすみの時間。</h2>
@@ -306,7 +323,11 @@
     <div class="divider"></div>
   </div>
   <div class="about">
-    <div class="about-visual"><div class="frame"></div></div>
+    <div class="about-visual">
+      <img src="https://images.unsplash.com/photo-1428515613728-6b4607e44363?auto=format&fit=crop&w=900&q=75" alt="カウンターでコーヒーを淹れるスタッフ" loading="lazy">
+      <div class="frame"></div>
+      <div class="badge">早朝、開店前の仕込みから一日が始まります</div>
+    </div>
     <div class="about-text">
       <p>Café Lumière は 2018年、蔵前の小さな路地に誕生しました。「lumière」はフランス語で"光"を意味します。慌ただしい毎日の中で、ふと差し込む光のような一杯を届けたい——そんな想いから店名をつけました。</p>
       <p>豆は季節ごとに産地を選び、店内の小さな焙煎機で少量ずつ焙煎しています。焼き菓子はすべて当日の朝、キッチンで手作り。素材の味を活かしたシンプルな味わいを大切にしています。</p>
@@ -329,6 +350,7 @@
   </div>
   <div class="menu-grid">
     <div class="menu-panel active" data-panel="drink">
+      <div class="menu-banner"><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=1400&q=75" alt="ハンドドリップでコーヒーを淹れる様子" loading="lazy"></div>
       <div class="menu-item"><div class="info"><h4>ルミエールブレンド</h4><p>自家焙煎の看板ブレンド。ナッツのような香ばしさ</p></div><div class="price">¥580</div></div>
       <div class="menu-item"><div class="info"><h4>カフェラテ</h4><p>エスプレッソと丁寧に温めたミルク</p></div><div class="price">¥620</div></div>
       <div class="menu-item"><div class="info"><h4>水出しアイスコーヒー</h4><p>12時間じっくり抽出、すっきりとした後味</p></div><div class="price">¥650</div></div>
@@ -337,12 +359,14 @@
       <div class="menu-item"><div class="info"><h4>抹茶オレ</h4><p>京都産抹茶と豆乳、または牛乳で</p></div><div class="price">¥650</div></div>
     </div>
     <div class="menu-panel" data-panel="food">
+      <div class="menu-banner"><img src="https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=1400&q=75" alt="スパイスカレーのプレート" loading="lazy"></div>
       <div class="menu-item"><div class="info"><h4>本日のキッシュプレート</h4><p>季節野菜のキッシュとサラダ、スープ付き</p></div><div class="price">¥1,280</div></div>
       <div class="menu-item"><div class="info"><h4>アボカドとエビのオープンサンド</h4><p>自家製カンパーニュにたっぷりの具材</p></div><div class="price">¥1,180</div></div>
       <div class="menu-item"><div class="info"><h4>ルミエールカレー</h4><p>スパイスから仕込む野菜ゴロゴロカレー</p></div><div class="price">¥1,350</div></div>
       <div class="menu-item"><div class="info"><h4>グリルチーズサンド</h4><p>3種のチーズを合わせた食事系サンド</p></div><div class="price">¥980</div></div>
     </div>
     <div class="menu-panel" data-panel="sweets">
+      <div class="menu-banner"><img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=1400&q=75" alt="季節のフルーツタルト" loading="lazy"></div>
       <div class="menu-item"><div class="info"><h4>バスクチーズケーキ</h4><p>濃厚でとろけるひと切れ</p></div><div class="price">¥680</div></div>
       <div class="menu-item"><div class="info"><h4>焼きたてスコーン</h4><p>クロテッドクリームと自家製ジャム添え</p></div><div class="price">¥550</div></div>
       <div class="menu-item"><div class="info"><h4>季節のフルーツタルト</h4><p>その日仕入れたフルーツをたっぷりと</p></div><div class="price">¥720</div></div>
@@ -358,8 +382,14 @@
     <div class="divider"></div>
   </div>
   <div class="gallery-grid">
-    <div>☕</div><div>🥐</div><div>📚</div><div>🌿</div>
-    <div>🍰</div><div>🪟</div><div>🕯️</div><div>🌤️</div>
+    <figure><img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&fit=crop&w=500&q=70" alt="自家焙煎のコーヒー豆" loading="lazy"><figcaption>自家焙煎コーヒー豆</figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=500&q=70" alt="焼きたてのパン" loading="lazy"><figcaption>毎朝焼き上げるパン</figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=500&q=70" alt="ラテアートとポルタフィルター" loading="lazy"><figcaption>一杯ずつ丁寧に</figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?auto=format&fit=crop&w=500&q=70" alt="緑に囲まれたテラス席" loading="lazy"><figcaption>緑に囲まれたテラス席</figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=500&q=70" alt="店内の様子" loading="lazy"><figcaption>あたたかな店内</figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=500&q=70" alt="乾杯するラテ" loading="lazy"><figcaption>ひとやすみのひととき</figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=500&q=70" alt="観葉植物とラテ" loading="lazy"><figcaption>窓辺のグリーン</figcaption></figure>
+    <figure><img src="https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=500&q=70" alt="ハンドドリップ抽出" loading="lazy"><figcaption>じっくり抽出中</figcaption></figure>
   </div>
 </section>
 
